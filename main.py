@@ -1,3 +1,5 @@
+#!/bin/env python3
+
 import argparse
 
 from x7 import X7, X7HardwareButtons
