@@ -7,9 +7,25 @@ class X7Commands(IntEnum):
     ACK = 2
     HARDWARE_BUTTON_STATE = 38
 
+# FIXME: We should ask for hardware capabilities first
 class X7HardwareButtons(IntEnum):
     SBX = 1
     MUTE = 8
+
+    # Not available on X7
+    VOICE = 4
+    MICROPHONE = 5
+    PHONE = 7
+    NOISE_REDUCTION = 9
+
+    # Back Buttons (BP = Bluetooth Player?), Not Available on X7
+    BP_PLAY = 10
+    BP_PREV_TRACK = 11
+    BP_NEXT_TRACK = 12
+    BP_PREV_FOLDER = 13
+    BP_NEXT_FOLDER = 14
+    BP_PLAY_RECORDING = 15
+    BP_RECORD_RECORDING = 16
 
 class X7BluetoothController():
     STARTBYTEID = 90
@@ -44,7 +60,7 @@ class X7BluetoothController():
                         button_states = data[1] | data[2] << 8 | data[3] << 16 | data[4] << 24
                         print("STATES", bin(button_states))
                         for button in X7HardwareButtons:
-                            print(button.name, not (button_states >> (button.value - 1) & 1))
+                            print(button.name, bool(button_states >> (button.value - 1) & 1))
         except bluetooth.btcommon.BluetoothError:
             pass
 
