@@ -30,6 +30,20 @@ class X7HardwareButtons(IntEnum):
     BP_PLAY_RECORDING = 15
     BP_RECORD_RECORDING = 16
 
+    # magic methods for argparse compatibility
+    def __str__(self):
+        return self.name
+
+    def __repr__(self):
+        return str(self)
+
+    @staticmethod
+    def argparse(s):
+        try:
+            return X7HardwareButtons[s.upper()]
+        except KeyError:
+            return s
+
 
 class X7BluetoothController:
     STARTBYTEID = 90
