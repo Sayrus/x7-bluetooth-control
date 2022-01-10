@@ -48,7 +48,7 @@ args = parser.parse_args()
 
 controller = X7(args.mac, True)
 if args.command == "mute":
-    controller.mute(args.target)
+    controller.mute(args.enabled)
 elif args.command == "set_hardware_button":
     controller._set_hardware_button(args.button, args.state)
 elif args.command == "audio_output":

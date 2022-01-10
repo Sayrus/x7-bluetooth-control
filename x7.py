@@ -11,10 +11,14 @@ class X7Commands(IntEnum):
 
 
 # Speaker Configuration
-# class X7SpeakerConfiguration(IntEnum):
-#     HEADPHONES = 1
-#     STEREO_2_0 = 2
-#     MULTI_CHANNEL_5_1 = 3
+class X7SpeakerConfiguration(IntEnum):
+    # This is actually Interger.MIN_VALUE in Java. This allows changing output
+    # to speakers without actually knowing the current SpeakerConfiguration
+    TOGGLE_TO_SPEAKER = -(2 ** 31)
+    HEADPHONES = 1
+    STEREO_2_0 = 2
+    MULTI_CHANNEL_5_1 = 3
+
 
 # Properties for SpeakerConfiguration
 # class X7SpeakerAdvancedConfiguration(IntEnum):
@@ -132,10 +136,9 @@ class X7:
 
     def set_audio_output(self, output):
         if output == "headphones":
-            config = 1
+            config = X7SpeakerConfiguration.HEADPHONES
         else:
-            # This is actually Interger.MIN_VALUE in Java
-            config = -(2 ** 31)
+            config = X7SpeakerConfiguration.TOGGLE_TO_SPEAKER
         payload = config.to_bytes(4, byteorder="little", signed=True)
         self.bluetooth.send_command(
             X7Commands.SPEAKER_CONFIGURATION, [0] + list(payload)
