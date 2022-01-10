@@ -7,7 +7,25 @@ from utils import packet_to_str
 class X7Commands(IntEnum):
     ACK = 2
     HARDWARE_BUTTON_STATE = 38
+    SPEAKER_CONFIGURATION = 41
 
+
+# Speaker Configuration
+# class X7SpeakerConfiguration(IntEnum):
+#     HEADPHONES = 1
+#     STEREO_2_0 = 2
+#     MULTI_CHANNEL_5_1 = 3
+
+# Properties for SpeakerConfiguration
+# class X7SpeakerAdvancedConfiguration(IntEnum):
+#     STEREO_2_0 = 1.0
+#     MULTI_CHANNEL_2_1 = 2.0
+#     MULTI_CHANNEL_3_0 = 3.0
+#     MULTI_CHANNEL_3_1 = 4.0
+#     MULTI_CHANNEL_4_0 = 5.0
+#     MULTI_CHANNEL_4_1 = 6.0
+#     MULTI_CHANNEL_5_0 = 7.0
+#     MULTI_CHANNEL_5_1 = 8.0
 
 # FIXME: We should ask for hardware capabilities first
 class X7HardwareButtons(IntEnum):
@@ -111,3 +129,14 @@ class X7:
 
     def sbx(self, enabled):
         self._set_hardware_button(X7HardwareButtons.SBX, enabled)
+
+    def set_audio_output(self, output):
+        if output == "headphones":
+            config = 1
+        else:
+            # This is actually Interger.MIN_VALUE in Java
+            config = -(2 ** 31)
+        payload = config.to_bytes(4, byteorder="little", signed=True)
+        self.bluetooth.send_command(
+            X7Commands.SPEAKER_CONFIGURATION, [0] + list(payload)
+        )

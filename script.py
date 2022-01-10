@@ -53,7 +53,7 @@ def set_volume(sock, index, level):
 sock = bluetooth.BluetoothSocket(bluetooth.RFCOMM)
 sock.connect(("00:02:3c:55:5F:37", 1))
 
-packet1 = bytes.fromhex("5a29050000000080")  # Speaker (Unknown MULTI config)
+packet1 = bytes.fromhex("5a29050004000000")  # Speaker (Unknown MULTI config)
 packet2 = bytes.fromhex("5a29050001000000")  # Headset
 packet3 = bytes.fromhex("5a23040000ffff")  # Volume
 
@@ -81,7 +81,7 @@ def mapping(i):
 mapping = [mapping(i) for i in range(101)]
 print(mapping)
 
-set_volume(sock, 0, mapping[50])
+# set_volume(sock, 0, mapping[50])
 
 # for i in range(50, 101, 2):
 #    print(i)
@@ -89,7 +89,7 @@ set_volume(sock, 0, mapping[50])
 #    time.sleep(1)
 # sock.send(packet2)
 # read_response(sock)
-# sock.send(packet2)
+sock.send(packet1)
 # print(sock.recv(100))
 
 sock.close()
